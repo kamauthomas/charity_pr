@@ -24,6 +24,40 @@ return [
     'email' => 'orders@cindyapparel.co.ke',
     'whatsapp' => 'https://wa.me/254700000000',
     'hero_product' => 'navy-bloom-belted-dress',
+    'hero_slides' => [
+        [
+            'image' => 'product-57.jpeg',
+            'eyebrow' => 'Cindy Apparel / Nairobi Edit',
+            'title_top' => 'Rooted in Elegance.',
+            'title_em' => 'Made for now.',
+            'copy' => 'Professional, feminine pieces priced for real wardrobes, styled with the polish of a luxury editorial.',
+            'collection' => 'prints',
+        ],
+        [
+            'image' => 'product-63.jpeg',
+            'eyebrow' => 'Occasion / Statement Dressing',
+            'title_top' => 'Occasion ready.',
+            'title_em' => 'Dressed to arrive.',
+            'copy' => 'Elevated maxis and standout silhouettes for ceremonies, dinners, and the moments worth remembering.',
+            'collection' => 'occasion',
+        ],
+        [
+            'image' => 'product-59.jpeg',
+            'eyebrow' => 'Workwear / Modern Tailoring',
+            'title_top' => 'Office polish.',
+            'title_em' => 'Tailored to lead.',
+            'copy' => 'Structured sets and clean lines that carry from morning meetings to everything after.',
+            'collection' => 'workwear',
+        ],
+        [
+            'image' => 'product-58.jpeg',
+            'eyebrow' => 'Weekend / Off-Duty Ease',
+            'title_top' => 'Weekend ease.',
+            'title_em' => 'Effortless by design.',
+            'copy' => 'Soft sets and relaxed separates with just enough polish for unhurried days.',
+            'collection' => 'weekend',
+        ],
+    ],
     'products' => $products,
     'collections' => [
         'workwear' => [

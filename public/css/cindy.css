@@ -97,18 +97,22 @@ button, input, select, textarea { font: inherit; }
 .page-main { overflow: hidden; }
 .container { margin: 0 auto; max-width: 1240px; padding: 0 clamp(1rem, 4vw, 3rem); }
 .hero { min-height: calc(100vh - 132px); overflow: hidden; position: relative; }
-.hero::before {
-    background: radial-gradient(circle at 20% 38%, rgba(255, 255, 255, .78), transparent 26rem);
-    content: "";
-    inset: 0;
-    position: absolute;
-    z-index: 1;
-}
 
-/* The catalogue photography is 2:3 portrait. Full-bleeding it across a wide
-   hero cropped away the model's head and feet and left only a wall of fabric,
-   so the image gets its own right-hand column at a portrait-friendly ratio
-   and the headline sits on clean ground instead of on top of a busy print. */
+/* Slides stack and cross-fade. The section carries its own min-height, so the
+   absolutely-positioned slides never collapse it. */
+.hero-slide {
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    transition: opacity .9s ease;
+    visibility: hidden;
+}
+.hero-slide.active { opacity: 1; pointer-events: auto; visibility: visible; z-index: 2; }
+
+/* The catalogue photography is 2:3 portrait. It gets its own right-hand column
+   at a portrait-friendly ratio so the headline sits on clean ground rather
+   than on top of a busy print. */
 .hero-media {
     bottom: 0;
     position: absolute;
@@ -126,16 +130,57 @@ button, input, select, textarea { font: inherit; }
 }
 .hero-content {
     align-items: center;
-    display: grid;
-    grid-template-columns: 84px minmax(0, 560px) minmax(0, 1fr);
+    display: flex;
     min-height: calc(100vh - 132px);
+    /* Reserve room at the foot so the tallest slide's buttons never collide
+       with the slide-selector row pinned to the hero bottom. */
+    padding-bottom: 4.5rem;
     position: relative;
     z-index: 2;
 }
-.hero-index { align-self: center; display: grid; gap: 1.45rem; justify-items: center; }
-.hero-index::before { background: var(--ink); content: ""; height: 44px; width: 1px; }
-.hero-index span { color: var(--muted); font-size: .86rem; }
-.hero-index .active { color: var(--ink); font-weight: 800; }
+.hero-copy-block { max-width: 560px; }
+
+/* Slide selectors: a row of numbered tabs pinned to the hero foot, aligned to
+   the container gutter. */
+.hero-index {
+    bottom: 2.2rem;
+    display: flex;
+    gap: 1.4rem;
+    left: 0;
+    margin: 0 auto;
+    max-width: 1240px;
+    padding-inline: clamp(1rem, 4vw, 3rem);
+    position: absolute;
+    right: 0;
+    z-index: 4;
+}
+.hero-dot {
+    background: none;
+    border: 0;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    padding: .3rem 0;
+    position: relative;
+    transition: color .3s ease;
+}
+.hero-dot::after {
+    background: var(--ink);
+    bottom: 0;
+    content: "";
+    height: 2px;
+    left: 0;
+    position: absolute;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .35s ease;
+    width: 1.7rem;
+}
+.hero-dot.active { color: var(--ink); font-weight: 800; }
+.hero-dot.active::after { transform: scaleX(1); }
+.hero-dot:hover { color: var(--ink); }
 .eyebrow { color: var(--ink); font-size: .8rem; font-weight: 800; letter-spacing: .18em; margin: 0 0 1.4rem; text-transform: uppercase; }
 .hero-title, .section-title, .page-title, .product-title {
     font-family: var(--serif);
@@ -303,16 +348,16 @@ button, input, select, textarea { font: inherit; }
     }
     .menu-open .main-nav { transform: translateX(0); }
     .menu-toggle { display: inline-flex; position: relative; z-index: 90; }
-    .hero-content { grid-template-columns: 1fr; padding-bottom: 5rem; padding-top: 5rem; }
-    .hero-index, .campaign-link { display: none; }
-    .hero::before { background: none; }
-    /* Below this width there is no room for two columns, so the photo becomes
-       a band under the headline and keeps its full, uncropped framing. */
-    .hero { display: flex; flex-direction: column; min-height: 0; }
-    .hero-content { min-height: 0; order: 1; }
-    .hero-media { height: min(62vh, 520px); order: 2; position: relative; width: 100%; }
-    .hero-media img { object-position: 50% 12%; }
+    /* Below this width there is no room for two columns, so each slide becomes
+       a photo band above the copy. Slides stay stacked so the slider still
+       cross-fades; the hero carries a fixed height so nothing collapses. */
+    .hero { min-height: 88vh; }
+    .hero-slide { display: flex; flex-direction: column; }
+    .hero-media { bottom: auto; height: 42vh; left: 0; position: relative; right: 0; top: 0; width: 100%; }
+    .hero-media img { object-position: 50% 16%; }
     .hero-media::after { display: none; }
+    .hero-content { align-items: flex-start; flex: 1; min-height: 0; padding: 1.7rem 0 3.6rem; }
+    .hero-index { bottom: 1.1rem; gap: 1.15rem; }
     .trust-grid, .product-grid, .collection-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .press-grid { grid-template-columns: repeat(3, 1fr); }
     .press-grid span { grid-column: 1 / -1; }

@@ -1,36 +1,39 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="hero">
-    <div class="hero-media">
-        <img src="{{ asset('assets/products/'.$hero['image']) }}" alt="{{ $hero['name'] }}">
-    </div>
-    <div class="container hero-content">
-        <div class="hero-index" aria-hidden="true">
-            <span class="active">01</span><span>02</span><span>03</span><span>04</span>
-        </div>
-        <div class="reveal in">
-            <p class="eyebrow">Cindy Apparel / Nairobi Edit</p>
-            <h1 class="hero-title">Rooted in <br>Elegance. <em>Made for now.</em></h1>
-            <p class="hero-copy">Professional, feminine pieces priced for real wardrobes, styled with the polish of a luxury editorial.</p>
-            <div class="hero-actions">
-                <a class="btn btn-dark" href="{{ route('shop') }}">Shop New In <span>→</span></a>
-                <a class="btn btn-line" href="{{ route('collections') }}">Explore Collections</a>
+<section class="hero" data-hero aria-roledescription="carousel" aria-label="Featured collections">
+    @foreach($heroSlides as $i => $slide)
+        <article class="hero-slide{{ $i === 0 ? ' active' : '' }}" data-hero-slide aria-hidden="{{ $i === 0 ? 'false' : 'true' }}" aria-roledescription="slide" aria-label="{{ $i + 1 }} of {{ $heroSlides->count() }}">
+            <div class="hero-media">
+                <img src="{{ asset('assets/products/'.$slide['image']) }}" alt="{{ $slide['title_top'] }}" {{ $i === 0 ? 'fetchpriority=high' : 'loading=lazy' }}>
             </div>
-        </div>
-        <a class="campaign-link" href="{{ route('collections.show', 'prints') }}">
-            <span class="play">▶</span>
-            <span>View<br>Campaign</span>
-        </a>
+            <div class="container hero-content">
+                <div class="hero-copy-block">
+                    <p class="eyebrow">{{ $slide['eyebrow'] }}</p>
+                    <h1 class="hero-title">{{ $slide['title_top'] }} <em>{{ $slide['title_em'] }}</em></h1>
+                    <p class="hero-copy">{{ $slide['copy'] }}</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-dark" href="{{ route('shop') }}">Shop New In <span>→</span></a>
+                        <a class="btn btn-line" href="{{ route('collections.show', $slide['collection']) }}">Explore Collection</a>
+                    </div>
+                </div>
+            </div>
+        </article>
+    @endforeach
+
+    <div class="hero-index" role="tablist" aria-label="Choose slide">
+        @foreach($heroSlides as $i => $slide)
+            <button type="button" class="hero-dot{{ $i === 0 ? ' active' : '' }}" data-hero-dot data-index="{{ $i }}" role="tab" aria-selected="{{ $i === 0 ? 'true' : 'false' }}" aria-label="Show {{ $slide['title_top'] }}">{{ sprintf('%02d', $i + 1) }}</button>
+        @endforeach
     </div>
 </section>
 
 <section class="trust-bar">
     <div class="container trust-grid">
-        <div class="trust-item"><span class="trust-icon">□</span><div><strong>Free Shipping</strong><span>Nairobi orders over KSh 3,500</span></div></div>
-        <div class="trust-item"><span class="trust-icon">↺</span><div><strong>Easy Returns</strong><span>3-day return policy</span></div></div>
-        <div class="trust-item"><span class="trust-icon">✓</span><div><strong>Secure Payments</strong><span>M-Pesa placeholder ready</span></div></div>
-        <div class="trust-item"><span class="trust-icon">☎</span><div><strong>Customer Support</strong><span>WhatsApp assisted ordering</span></div></div>
+        <div class="trust-item"><span class="trust-icon"><svg class="trust-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="7" cy="18" r="1.6" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="18" r="1.6" stroke="currentColor" stroke-width="1.5"/></svg></span><div><strong>Free Shipping</strong><span>Nairobi orders over KSh 3,500</span></div></div>
+        <div class="trust-item"><span class="trust-icon"><svg class="trust-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9a8 8 0 1 1-1 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M4 4v5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>Easy Returns</strong><span>3-day return policy</span></div></div>
+        <div class="trust-item"><span class="trust-icon"><svg class="trust-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>Secure Payments</strong><span>M-Pesa placeholder ready</span></div></div>
+        <div class="trust-item"><span class="trust-icon"><svg class="trust-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6c0-1 .8-2 2-2h2l1.5 4L8 10a12 12 0 0 0 6 6l2-1.5 4 1.5v2c0 1.2-1 2-2 2A16 16 0 0 1 4 6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span><div><strong>Customer Support</strong><span>WhatsApp assisted ordering</span></div></div>
     </div>
 </section>
 

@@ -80,6 +80,32 @@ class StorefrontTest extends TestCase
             ->assertSee("{$total} pieces");
     }
 
+    public function test_home_renders_every_hero_slide_and_its_controls(): void
+    {
+        $slides = config('cindy.hero_slides');
+        $this->assertNotEmpty($slides, 'No hero slides configured.');
+
+        $html = $this->get('/')->assertOk()->getContent();
+
+        // One slide article + one selector tab per configured slide.
+        $this->assertSame(count($slides), substr_count($html, 'data-hero-slide'));
+        $this->assertSame(count($slides), substr_count($html, 'data-hero-dot'));
+
+        // Each slide's headline actually reaches the page.
+        foreach ($slides as $slide) {
+            $this->assertStringContainsString($slide['title_top'], $html);
+        }
+    }
+
+    public function test_trust_row_uses_svg_icons_not_bare_glyphs(): void
+    {
+        // Unicode glyphs rendered as tofu boxes on some devices; the row must
+        // ship real inline SVGs instead.
+        $html = $this->get('/')->assertOk()->getContent();
+        $this->assertStringContainsString('trust-svg', $html);
+        $this->assertStringNotContainsString('□', $html);
+    }
+
     public function test_currency_is_rendered_with_consistent_casing(): void
     {
         // The cart JS mirrors this exact prefix; "Ksh" would drift from it.

@@ -18,6 +18,7 @@ Route::get('/', function () use ($catalog) {
         'products' => $products,
         'collections' => $collections,
         'hero' => $hero,
+        'heroSlides' => collect(config('cindy.hero_slides')),
     ]);
 })->name('home');
 

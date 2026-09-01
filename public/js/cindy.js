@@ -150,3 +150,60 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach((node) => observer.observe(node));
 updateCartCount();
 renderCart();
+
+
+// --- Hero slider ------------------------------------------------------------
+// Cross-fades hero slides and drives the numbered tabs. Auto-advances unless
+// the viewer prefers reduced motion; pauses on hover/focus.
+(function () {
+    const hero = document.querySelector('[data-hero]');
+    if (!hero) return;
+
+    const slides = [...hero.querySelectorAll('[data-hero-slide]')];
+    const dots = [...hero.querySelectorAll('[data-hero-dot]')];
+    if (slides.length < 2) return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let timer = null;
+
+    function show(next) {
+        index = (next + slides.length) % slides.length;
+        slides.forEach((slide, i) => {
+            const active = i === index;
+            slide.classList.toggle('active', active);
+            slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+        });
+        dots.forEach((dot, i) => {
+            const active = i === index;
+            dot.classList.toggle('active', active);
+            dot.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+    }
+
+    function start() {
+        if (reduce) return;
+        stop();
+        timer = window.setInterval(() => show(index + 1), 6000);
+    }
+
+    function stop() {
+        if (timer) window.clearInterval(timer);
+        timer = null;
+    }
+
+    dots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+            show(Number(dot.dataset.index));
+            start();
+        });
+    });
+
+    hero.addEventListener('mouseenter', stop);
+    hero.addEventListener('mouseleave', start);
+    hero.addEventListener('focusin', stop);
+    hero.addEventListener('focusout', start);
+
+    show(0);
+    start();
+})();
