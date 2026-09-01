@@ -235,7 +235,7 @@ button, input, select, textarea { font: inherit; }
 .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
 .trust-item { align-items: center; border-right: 1px solid var(--line); display: flex; gap: 1.1rem; min-height: 116px; padding: 1.5rem clamp(1rem, 3vw, 2.4rem); }
 .trust-item:last-child { border-right: 0; }
-.trust-icon { align-items: center; border: 1px solid var(--ink); border-radius: 50%; color: var(--ink); display: inline-flex; flex: 0 0 44px; height: 44px; justify-content: center; width: 44px; }
+.trust-item .trust-icon { align-items: center; border: 1px solid var(--ink); border-radius: 50%; color: var(--ink); display: inline-flex; flex: 0 0 44px; font-size: 0; height: 44px; justify-content: center; margin: 0; width: 44px; }
 .trust-svg { display: block; }
 .trust-item strong { display: block; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; }
 .trust-item span { color: var(--muted); display: block; font-size: .9rem; margin-top: .25rem; }
